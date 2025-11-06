@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.title }} - 商品详情{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <!-- 商品图片 -->
+        {% if product.images %}
+        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for image in product.get_images_list() %}
+                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                    <img src="{{ url_for('static', filename='uploads/' + image) }}"
+                         class="d-block w-100" alt="{{ product.title }}" style="max-height: 500px; object-fit: contain;">
+                </div>
+                {% endfor %}
+            </div>
+            {% if product.get_images_list()|length > 1 %}
+            <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 400px;">
+            <i class="bi bi-image text-white" style="font-size: 5rem;"></i>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-6">
+        <!-- 商品信息 -->
+        <h2>{{ product.title }}</h2>
+
+        <div class="my-3">
+            <span class="badge bg-info">{{ product.category.name }}</span>
+            <span class="badge bg-secondary">{{ product.condition }}</span>
+            {% if product.status == 'available' %}
+            <span class="badge bg-success">在售</span>
+            {% elif product.status == 'sold' %}
+            <span class="badge bg-danger">已售出</span>
+            {% else %}
+            <span class="badge bg-warning">已预定</span>
+            {% endif %}
+        </div>
+
+        <div class="border-top border-bottom py-3 my-3">
+            <div class="row">
+                <div class="col-6">
+                    <h3 class="text-danger mb-0">¥{{ product.price }}</h3>
+                    {% if product.original_price %}
+                    <small class="text-muted text-decoration-line-through">原价: ¥{{ product.original_price }}</small>
+                    {% endif %}
+                </div>
+                <div class="col-6 text-end">
+                    <div class="text-muted small">
+                        <i class="bi bi-eye"></i> {{ product.view_count }} 次浏览<br>
+                        <i class="bi bi-heart"></i> {{ product.favorite_count }} 次收藏
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <h5>商品描述</h5>
+            <p class="text-muted">{{ product.description }}</p>
+        </div>
+
+        <div class="mb-3">
+            <p><strong>交易地点：</strong>{{ product.trade_location or '面议' }}</p>
+            <p><strong>发布时间：</strong>{{ product.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+        </div>
+
+        <!-- 卖家信息 -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <h6 class="card-title">卖家信息</h6>
+                <p class="mb-1"><i class="bi bi-person"></i> {{ product.seller.username }}</p>
+                <p class="mb-1"><i class="bi bi-geo-alt"></i> {{ product.seller.campus }}</p>
+                <p class="mb-0"><i class="bi bi-star"></i> 信用分: {{ product.seller.credit_score }}</p>
+            </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        {% if current_user.is_authenticated %}
+            {% if product.seller_id == current_user.id %}
+            <div class="d-grid gap-2">
+                <button class="btn btn-secondary" disabled>这是您发布的商品</button>
+            </div>
+            {% elif product.status == 'available' %}
+            <div class="d-grid gap-2">
+                <form method="POST" action="{{ url_for('create_order', product_id=product.id) }}">
+                    <button type="submit" class="btn btn-danger btn-lg w-100 mb-2">
+                        <i class="bi bi-cart-check"></i> 立即购买
+                    </button>
+                </form>
+                <button class="btn btn-outline-danger" onclick="toggleFavorite({{ product.id }})">
+                    <i class="bi bi-heart{% if is_favorited %}-fill{% endif %}" id="favorite-icon"></i>
+                    <span id="favorite-text">{% if is_favorited %}取消收藏{% else %}收藏{% endif %}</span>
+                </button>
+            </div>
+            {% else %}
+            <div class="d-grid gap-2">
+                <button class="btn btn-secondary" disabled>商品已售出</button>
+            </div>
+            {% endif %}
+        {% else %}
+        <div class="d-grid gap-2">
+            <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">
+                登录后购买
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 卖家其他商品 -->
+{% if other_products %}
+<hr class="my-5">
+<h4>卖家其他商品</h4>
+<div class="row row-cols-1 row-cols-md-4 g-4 mt-2">
+    {% for p in other_products %}
+    <div class="col">
+        <div class="card h-100">
+            {% if p.images %}
+            <img src="{{ url_for('static', filename='uploads/' + p.get_images_list()[0]) }}"
+                 class="card-img-top" alt="{{ p.title }}" style="height: 150px; object-fit: cover;">
+            {% endif %}
+            <div class="card-body">
+                <h6 class="card-title text-truncate">{{ p.title }}</h6>
+                <p class="text-danger fw-bold">¥{{ p.price }}</p>
+                <a href="{{ url_for('product_detail', product_id=p.id) }}" class="btn btn-sm btn-primary">查看</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
+
+

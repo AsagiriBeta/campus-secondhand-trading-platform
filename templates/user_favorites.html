@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}我的收藏 - 校园二手交易平台{% endblock %}
+
+{% block content %}
+<h3 class="mb-4"><i class="bi bi-heart"></i> 我的收藏</h3>
+
+{% if favorites.items %}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for favorite in favorites.items %}
+    <div class="col">
+        <div class="card h-100">
+            {% if favorite.product.images %}
+            <img src="{{ url_for('static', filename='uploads/' + favorite.product.get_images_list()[0]) }}"
+                 class="card-img-top" alt="{{ favorite.product.title }}" style="height: 200px; object-fit: cover;">
+            {% else %}
+            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
+            </div>
+            {% endif %}
+
+            <div class="card-body">
+                <h5 class="card-title">{{ favorite.product.title }}</h5>
+                <p class="text-danger fs-5 fw-bold">¥{{ favorite.product.price }}</p>
+                <p class="small text-muted">
+                    收藏于 {{ favorite.created_at.strftime('%Y-%m-%d') }}
+                </p>
+                {% if favorite.product.status == 'available' %}
+                <span class="badge bg-success">在售</span>
+                {% else %}
+                <span class="badge bg-secondary">已售出</span>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="{{ url_for('product_detail', product_id=favorite.product.id) }}"
+                   class="btn btn-sm btn-primary">查看详情</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- 分页 -->
+{% if favorites.pages > 1 %}
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if favorites.has_prev %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('user_favorites', page=favorites.prev_num) }}">上一页</a>
+        </li>
+        {% endif %}
+
+        {% for page_num in favorites.iter_pages() %}
+            {% if page_num %}
+                <li class="page-item {% if page_num == favorites.page %}active{% endif %}">
+                    <a class="page-link" href="{{ url_for('user_favorites', page=page_num) }}">{{ page_num }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if favorites.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('user_favorites', page=favorites.next_num) }}">下一页</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% else %}
+<div class="alert alert-info text-center">
+    <i class="bi bi-heart" style="font-size: 3rem;"></i>
+    <p class="mt-3">您还没有收藏任何商品</p>
+    <a href="{{ url_for('index') }}" class="btn btn-primary">去逛逛</a>
+</div>
+{% endif %}
+{% endblock %}
+

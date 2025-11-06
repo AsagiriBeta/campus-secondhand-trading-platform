@@ -1,0 +1,454 @@
+/* 校园二手交易平台 - 自定义样式 */
+
+/* ==================== 全局样式 ==================== */
+:root {
+    --primary-color: #7030A0;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #0dcaf0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 覆盖链接颜色为南京大学紫色 */
+a {
+    color: #7030A0;
+}
+
+a:hover {
+    color: #5a2480;
+}
+
+/* ==================== 导航栏 ==================== */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.08);
+}
+
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+/* 覆盖Bootstrap的bg-primary背景色为南京大学紫色 */
+.bg-primary {
+    background-color: #7030A0 !important;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+/* ==================== 商品卡片 ==================== */
+.product-card {
+    transition: all 0.3s ease;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,.15);
+}
+
+.product-card img {
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover img {
+    transform: scale(1.05);
+}
+
+.card-img-top {
+    object-fit: cover;
+    background-color: #f0f0f0;
+}
+
+/* ==================== 商品详情 ==================== */
+.carousel-item img {
+    background-color: #fff;
+}
+
+.badge {
+    font-size: 0.85rem;
+    padding: 0.35rem 0.65rem;
+}
+
+/* ==================== 收藏按钮 ==================== */
+.btn-favorite {
+    transition: all 0.3s ease;
+}
+
+.btn-favorite:hover {
+    transform: scale(1.05);
+}
+
+.favorited {
+    color: #dc3545;
+}
+
+.favorited i {
+    animation: heartBeat 0.5s ease;
+}
+
+@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.3); }
+    50% { transform: scale(1.1); }
+    75% { transform: scale(1.2); }
+}
+
+/* ==================== 表单样式 ==================== */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(112, 48, 160, 0.25);
+}
+
+.is-invalid {
+    border-color: #dc3545;
+}
+
+.is-invalid:focus {
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* ==================== 图片预览 ==================== */
+.image-preview {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin: 5px;
+    border-radius: 0.375rem;
+    border: 2px solid #dee2e6;
+}
+
+#image-preview {
+    margin-top: 1rem;
+}
+
+/* ==================== 分页 ==================== */
+.pagination {
+    margin-top: 2rem;
+}
+
+.page-link {
+    color: var(--primary-color);
+}
+
+.page-link:hover {
+    color: #5a2480;
+}
+
+.page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* ==================== 空状态 ==================== */
+.empty-state {
+    padding: 3rem 1rem;
+    text-align: center;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* ==================== Toast通知 ==================== */
+.toast-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 9999;
+}
+
+/* ==================== 加载动画 ==================== */
+.loading-placeholder {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ==================== 用户头像 ==================== */
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-avatar-large {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* ==================== 订单状态 ==================== */
+.order-status {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* ==================== 响应式设计 ==================== */
+@media (max-width: 768px) {
+    .product-card {
+        margin-bottom: 1rem;
+    }
+
+    .navbar-brand {
+        font-size: 1rem;
+    }
+
+    .user-avatar-large {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+/* ==================== 页脚 ==================== */
+footer {
+    margin-top: auto;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+
+/* ==================== 列表组 ==================== */
+.list-group-item {
+    transition: background-color 0.2s ease;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+.list-group-item.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* ==================== 价格显示 ==================== */
+.price-tag {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #dc3545;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+/* ==================== 统计标签 ==================== */
+.stats-icon {
+    margin-right: 0.25rem;
+    color: #6c757d;
+}
+
+/* ==================== 搜索框 ==================== */
+.search-form {
+    min-width: 250px;
+}
+
+@media (max-width: 992px) {
+    .search-form {
+        min-width: 100%;
+        margin-top: 0.5rem;
+    }
+}
+
+/* ==================== 图片懒加载占位符 ==================== */
+img[data-src] {
+    background-color: #f0f0f0;
+}
+
+/* ==================== 按钮样式增强 ==================== */
+.btn {
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,.15);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* 覆盖Bootstrap的btn-primary按钮为南京大学紫色 */
+.btn-primary {
+    background-color: #7030A0;
+    border-color: #7030A0;
+}
+
+.btn-primary:hover {
+    background-color: #5a2480;
+    border-color: #5a2480;
+}
+
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: #5a2480;
+    border-color: #5a2480;
+    box-shadow: 0 0 0 0.2rem rgba(112, 48, 160, 0.5);
+}
+
+.btn-outline-primary {
+    color: #7030A0;
+    border-color: #7030A0;
+}
+
+.btn-outline-primary:hover {
+    background-color: #7030A0;
+    border-color: #7030A0;
+    color: #fff;
+}
+
+/* ==================== 卡片标题截断 ==================== */
+.card-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ==================== 文本截断 ==================== */
+.text-truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ==================== 侧边栏 ==================== */
+.sidebar {
+    position: sticky;
+    top: 20px;
+}
+
+/* ==================== 工具提示 ==================== */
+.tooltip {
+    font-size: 0.875rem;
+}
+
+/* ==================== 徽章样式 ==================== */
+.badge-new {
+    background-color: #28a745;
+    color: white;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border-radius: 0.25rem;
+}
+
+/* ==================== 输入框图标 ==================== */
+.input-group-text {
+    background-color: #fff;
+}
+
+/* ==================== 文件上传 ==================== */
+.custom-file-upload {
+    border: 2px dashed #dee2e6;
+    padding: 2rem;
+    text-align: center;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-file-upload:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(112, 48, 160, 0.05);
+}
+
+/* ==================== 评分星星 ==================== */
+.rating-stars {
+    color: #ffc107;
+}
+
+.rating-stars i {
+    margin-right: 0.1rem;
+}
+
+/* ==================== 滚动条样式 ==================== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* ==================== Bootstrap主色调覆盖 ==================== */
+/* 文本颜色 */
+.text-primary {
+    color: #7030A0 !important;
+}
+
+/* 边框颜色 */
+.border-primary {
+    border-color: #7030A0 !important;
+}
+
+/* Alert组件 */
+.alert-primary {
+    background-color: rgba(112, 48, 160, 0.1);
+    border-color: #7030A0;
+    color: #5a2480;
+}
+
+/* 徽章 */
+.badge.bg-primary {
+    background-color: #7030A0 !important;
+}
+
+/* 进度条 */
+.progress-bar {
+    background-color: #7030A0;
+}
+
+/* 下拉菜单激活项 */
+.dropdown-item:active,
+.dropdown-item.active {
+    background-color: #7030A0;
+}
+

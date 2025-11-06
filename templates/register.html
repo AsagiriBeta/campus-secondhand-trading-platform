@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}用户注册 - 校园二手交易平台{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white text-center">
+                <h4 class="mb-0"><i class="bi bi-person-plus"></i> 用户注册</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('register') }}">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="student_id" class="form-label">学号 *</label>
+                            <input type="text" class="form-control" id="student_id" name="student_id" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="username" class="form-label">用户名 *</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">密码 *</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="real_name" class="form-label">真实姓名 *</label>
+                        <input type="text" class="form-control" id="real_name" name="real_name" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">邮箱 *</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="phone" class="form-label">手机号 *</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="campus" class="form-label">校区</label>
+                        <select class="form-select" id="campus" name="campus">
+                            <option value="">请选择校区</option>
+                            <option value="本部">本部</option>
+                            <option value="东校区">东校区</option>
+                            <option value="西校区">西校区</option>
+                            <option value="南校区">南校区</option>
+                        </select>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">注册</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                已有账号? <a href="{{ url_for('login') }}">立即登录</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
