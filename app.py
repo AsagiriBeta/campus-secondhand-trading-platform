@@ -328,6 +328,80 @@ def order_detail(order_id):
     return render_template('order_detail.html', order=order)
 
 
+
+
+@app.route('/order/<int:order_id>/cancel', methods=['POST'])
+@login_required
+def cancel_order(order_id):
+    """取消订单"""
+    order = Order.query.get_or_404(order_id)
+
+    #只有买家可以取消
+    if order.buyer_id != current_user.id:
+        flash('您无权取消该订单', 'danger')
+        return redirect(url_for('order_detail', order_id=order.id))
+
+    # 只有 'pending' (待处理) 状态的订单可以取消
+    if order.status != 'pending':
+        flash(f'该订单状态（{order.status}）无法取消', 'warning')
+        return redirect(url_for('order_detail', order_id=order.id))
+
+    # 更新订单状态
+    order.status = 'cancelled'
+    order.cancelled_at = datetime.now()  #
+
+    # 会在此时自动将 product.status 恢复为 'available'。
+    db.session.commit()
+    # 记录日志
+    log = SystemLog(user_id=current_user.id, action='cancel_order',
+                    table_name='orders', record_id=order.id,
+                    description=f'取消订单：{order.order_no}')  #
+    db.session.add(log)
+    db.session.commit()
+
+    flash('订单已成功取消', 'success')
+    return redirect(url_for('order_detail', order_id=order.id))
+
+
+# ... (在 app.py 的 cancel_order 函数之后) ...
+
+@app.route('/order/<int:order_id>/complete', methods=['POST'])
+@login_required
+def complete_order(order_id):
+    """(卖家) 确认订单完成"""
+
+    order = Order.query.get_or_404(order_id)
+    if order.seller_id != current_user.id:
+        flash('您无权操作该订单', 'danger')
+        return redirect(url_for('order_detail', order_id=order.id))
+     # 状态检查：只有 'pending' (或 'paid') 状态的订单可以被标记为完成
+
+    if order.status != 'pending':
+        flash(f'该订单状态（{order.status}）无法被标记为完成', 'warning')
+        return redirect(url_for('order_detail', order_id=order.id))
+
+
+    order.status = 'completed'
+    order.completed_at = datetime.now()  #
+
+    # 2. 更新商品状态
+    if order.product:
+        order.product.status = 'sold'
+        # 数据库触发器 'update_sold_time' 会自动更新 sold_at
+
+    # 3. 提交数据库
+    db.session.commit()
+    # 4. 记录日志
+    log = SystemLog(user_id=current_user.id, action='complete_order',
+                    table_name='orders', record_id=order.id,
+                    description=f'确认订单完成：{order.order_no}')
+    db.session.add(log)
+    db.session.commit()
+
+    flash('交易已成功确认完成！双方信用分已更新。', 'success')
+    return redirect(url_for('order_detail', order_id=order.id))
+
+
 @app.route('/user/profile')
 @login_required
 def user_profile():
