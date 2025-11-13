@@ -93,5 +93,45 @@
         </div>
     </div>
 </div>
+
+    {% if order.status == 'pending' and current_user.id == order.buyer_id %}
+  <div class="card mt-4">
+    <div class="card-header bg-danger text-white">
+      危险操作
+    </div>
+    <div class="card-body">
+      <p>订单当前为“待处理”状态。如果您不想购买了，可以取消此订单。</p>
+      <p class="text-muted small">取消后，商品将恢复为可售状态。</p>
+
+      <form action="{{ url_for('cancel_order', order_id=order.id) }}" method="POST"
+            onsubmit="return confirm('您确定要取消此订单吗？');">
+        <button type="submit" class="btn btn-danger">
+          <i class="bi bi-x-circle"></i> 确认取消订单
+        </button>
+      </form>
+    </div>
+  </div>
+{% endif %}
+
+    {% if order.status == 'pending' and current_user.id == order.seller_id %}
+  <div class="card mt-4">
+    <div class="card-header bg-success text-white">
+      卖家操作
+    </div>
+    <div class="card-body">
+      <p>您是该商品的卖家。请在与买家完成线下交易（收款并交货）后，点击此按钮确认交易完成。</p>
+      <p class="text-muted small">点击后，订单状态将变为“已完成”，商品将标记为“已售出”，双方信用分将自动更新。</p>
+
+      <form action="{{ url_for('complete_order', order_id=order.id) }}" method="POST"
+            onsubmit="return confirm('请确认您已与买家完成交易并收款。此操作不可逆！');">
+        <button type="submit" class="btn btn-success">
+          <i class="bi bi-check-circle"></i> 确认交易完成
+        </button>
+      </form>
+    </div>
+  </div>
+{% endif %}
+
 {% endblock %}
+
 
